@@ -1,0 +1,50 @@
+<!--Jiahui Xu, May 10, 2014.
+This website helps people to find their dreamjobs based on their current skills!-->
+<DOCTYPE html>
+<html>
+<head>
+	<title>skillMatch</title>
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#findJob').click(function() {
+				document.getElementById("matchJobs").innerHTML = '';
+				$.ajax({
+					url: "https://jobs.github.com/positions.json?description=" + document.getElementById("skill").value,
+					dataType: "jsonp",
+					success: function (data)
+					{
+						// loop over all the object in the file
+						var ul = document.createElement("ul");
+						for (var object in data) {
+							var li = document.createElement("li");
+							li.innerHTML = data[object]["company"] + ": " + data[object]["title"]
+							+ "<br />" + data[object]["url"] + "<br />";
+
+							ul.appendChild(li);
+						}
+						document.getElementById("matchJobs").appendChild(ul);
+						alert('load was performed');
+					}
+				});
+			});
+
+		});
+	</script>
+</head>
+
+<body>
+	<h1>Find jobs that match your skills!</h1>
+	<p>Typing your skills in the text box, and find out the available jobs that match your skills!</p>
+	<div>
+		<label>Skills you have:
+			<input type="text" id="skill"/>
+		</label>
+		<button id="findJob">submit your skills!</button>
+	</div>
+	<!-- place where to display jobs -->
+	<h2>The skills could not be empty!</h2>
+	<h3>Current openning jobs(get from GitHub, please be patient! It takes at most three seconds):</h3>
+	<div id="matchJobs"></div>
+</body>
+</html>
